@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New group</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container my-4">
+
+    <div class="card mx-auto">
+
+      <div class="card-header">
+        New group
+      </div>
+
+      <div class="card-body">
+
+        <form>
+
+          <div class="form-group mb-3">
+            <label for="group-name" class="form-label">Group name:</label>
+            <input type="text" class="form-control" id="group-name">
+          </div>
+          <div class="form-group mb-3">
+            <label for="participant-name" class="form-label">Add participant:</label>
+            <div class="input-group">
+              <input type="text" class="form-control" id="participant-name">
+              <button class="btn btn-primary" type="button" id="add-participant-btn">Add</button>
+            </div>
+          </div>
+
+          <div id="participants-list-container" hidden>
+            <h4>Participants</h4>
+            <ul id="participants-list"></ul>
+          </div>
+
+          <div class="d-grid gap-2 mx-auto">
+            <button class="btn btn-primary" type="submit" id="submit-btn">Done!</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="new_group.js"></script>
+</body>
+
+</html>

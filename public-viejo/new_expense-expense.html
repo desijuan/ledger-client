@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New expense</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="container my-4">
+
+    <div class="card mx-auto">
+
+      <div class="card-header">
+        New expense
+      </div>
+
+      <div class="card-body">
+
+        <!-- <ul class="nav nav-tabs mb-3">
+          <li class="nav-item">
+            <a href="#" class="nav-link active" aria-current="page">Expense</a>
+          </li>
+          <li class="nav-item">
+            <a href="new_expense-money-given.html" class="nav-link">Money given</a>
+          </li>
+          <li class="nav-item">
+            <a href="new_expense-income.html" class="nav-link">Income</a>
+          </li>
+        </ul> -->
+
+        <form>
+
+          <div class="row g-3 align-items-center mb-3">
+            <div class="col-auto">
+              <select class="form-select">
+                <option value="Carlos" selected>Carlos</option>
+                <option value="Lucía">Lucía</option>
+                <option value="Daniel">Daniel</option>
+                <option value="Sara">Sara</option>
+              </select>
+            </div>
+            <div class="col">
+              <p class="col-form-label">paid for something</p>
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="amount" class="form-label">How much?</label>
+            <div class="input-group mb-3">
+              <span class="input-group-text">$</span>
+              <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)">
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="split" id="split-equally" checked>
+              <label class="form-check-label" for="split-equally">
+                Split equally between everyone
+              </label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="split" id="split-differently">
+              <label class="form-check-label" for="split-differently">
+                Split differently
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group mb-3">
+            <label for="description" class="form-label">What for?</label>
+            <input type="text" class="form-control" id="descrption">
+          </div>
+          <div class="form-group mb-3">
+            <label for="date" class="form-label">When?</label>
+            <input type="date" class="form-control" id="date">
+          </div>
+
+          <div class="d-grid gap-2 mx-auto">
+            <button type="submit" class="btn btn-primary" id="submit-btn">Add expense</button>
+            <button type="button" class="btn btn-secondary">Cancel</button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="bootstrap.bundle.min.js"></script>
+  <script src="main.js"></script>
+</body>
+
+</html>
