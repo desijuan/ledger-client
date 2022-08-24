@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from './views/Landing';
 import NewGroup from './views/NewGroup';
 import GroupOverview from './views/GroupOverview';
-import NewExpenseMoneyGiven from './views/NewExpenseMoneyGiven';
+import NewExpense from './views/NewExpense';
 import NothingHere from './views/NothingHere';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -17,11 +17,8 @@ root.render(
     <Routes>
       <Route path='/' element={<Landing />} />
       <Route path='new-group' element={<NewGroup />} />
-      <Route path='id' element={<GroupOverview />} />
-      <Route
-        path='id/new-expense/money-given'
-        element={<NewExpenseMoneyGiven />}
-      />
+      <Route path='group/id' element={<GroupOverview />} />
+      <Route path='group/id/new-expense' element={<NewExpense />} />
       <Route path='/*' element={<NothingHere />} />
     </Routes>
   </BrowserRouter>
