@@ -17,8 +17,8 @@ root.render(
     <Routes>
       <Route path='/' element={<Landing />} />
       <Route path='new-group' element={<NewGroup />} />
-      <Route path='group/id' element={<GroupOverview />} />
-      <Route path='group/id/new-expense' element={<NewExpense />} />
+      <Route path='group/:groupID' element={<GroupOverview />} />
+      <Route path='group/:groupID/new-expense' element={<NewExpense />} />
       <Route path='/*' element={<NothingHere />} />
     </Routes>
   </BrowserRouter>
