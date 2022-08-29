@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import Window from './Window';
 
@@ -49,7 +49,7 @@ const Expenses = () => {
     }
   };
 
-  const groupID = '630a3f7bda370e75891e6020';
+  const { groupID } = useParams();
 
   if (state.loading) {
     getGroup(groupID);
@@ -67,7 +67,7 @@ const Expenses = () => {
 
   const group = state.data;
 
-  if (group.ledger.length === 0) {
+  if (group.expenses.length === 0) {
     return (
       <div>
         <div className='d-flex align-items-center justify-content-between'>
@@ -89,7 +89,7 @@ const Expenses = () => {
 
   return (
     <>
-      <div className='d-flex align-items-center justify-content-between'>
+      <div className='d-flex align-items-center justify-content-between mb-3'>
         <h4>Expenses</h4>
         <button
           type='button'
@@ -101,11 +101,13 @@ const Expenses = () => {
         </button>
       </div>
 
-      <ul id='expenses-list'>
-        {group.ledger.map((entry) => (
-          <li>{`${entry.from} gave $${entry.amount.toFixed(2)} to ${
-            entry.to
-          } for ${entry.for}.`}</li>
+      <ul className='list-group list-group-flush' id='expenses-list'>
+        {group.expenses.map((entry) => (
+          <li className='list-group-item'>{`${
+            entry.from
+          } gave $${entry.amount.toFixed(2)} to ${entry.to} for ${
+            entry.for
+          }.`}</li>
         ))}
       </ul>
     </>
