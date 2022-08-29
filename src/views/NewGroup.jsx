@@ -22,15 +22,14 @@ const Form = () => {
 
   const submitBtnHandler = async () => {
     try {
+      participants.sort();
       const newGroup = { name: groupNameInputRef.current.value, participants };
-      console.log(newGroup);
-
-      // const response = await axios.post(
-      //   `${process.env.REACT_APP_SERVER_URL}/api/v1/groups`,
-      //   newGroup
-      // );
-      // const groupID = response.data._id;
-      // navigate(`../group/${groupID}`);
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/v1/groups`,
+        newGroup
+      );
+      const groupID = response.data._id;
+      navigate(`../group/${groupID}`);
     } catch (error) {
       console.log(error);
     }
