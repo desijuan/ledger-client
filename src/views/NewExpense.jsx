@@ -62,7 +62,7 @@ const Form = () => {
 
 const NewExpense = () => {
   return (
-    <Window title='Group overview'>
+    <Window title='New expense'>
       <Form />
     </Window>
   );
