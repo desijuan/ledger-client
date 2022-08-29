@@ -6,31 +6,31 @@ import { useNavigate } from 'react-router-dom';
 import Window from './Window';
 
 const Form = () => {
-  const [group, setGroup] = useState({ name: '', participants: [] });
+  const [participants, setParticipants] = useState([]);
 
-  const addParticipantInputRef = useRef(null);
   const groupNameInputRef = useRef(null);
+  const addParticipantInputRef = useRef(null);
 
   const navigate = useNavigate();
 
   const addParticipantBtnHandler = () => {
-    const participant = addParticipantInputRef.current.value;
+    const newParticipantName = addParticipantInputRef.current.value;
     addParticipantInputRef.current.value = '';
-    const participants = group.participants;
-    participants.push(participant);
-    setGroup({ ...group, participants });
+    addParticipantInputRef.current.focus();
+    setParticipants((participants) => [...participants, newParticipantName]);
   };
 
   const submitBtnHandler = async () => {
     try {
-      const name = groupNameInputRef.current.value;
-      const newGroup = { ...group, name: name };
-      const response = await axios.post(
-        'http://localhost:5000/api/v1/groups',
-        newGroup
-      );
-      const groupID = response.data._id;
-      navigate(`../group/${groupID}`);
+      const newGroup = { name: groupNameInputRef.current.value, participants };
+      console.log(newGroup);
+
+      // const response = await axios.post(
+      //   `${process.env.REACT_APP_SERVER_URL}/api/v1/groups`,
+      //   newGroup
+      // );
+      // const groupID = response.data._id;
+      // navigate(`../group/${groupID}`);
     } catch (error) {
       console.log(error);
     }
@@ -70,13 +70,10 @@ const Form = () => {
           </button>
         </div>
       </div>
-      <div
-        id='participants-list-container'
-        hidden={group.participants.length === 0}
-      >
+      <div id='participants-list-container' hidden={participants.length === 0}>
         <h4>Participants</h4>
         <ul id='participants-list'>
-          {group.participants.map((participant, index) => (
+          {participants.map((participant, index) => (
             <li key={index}>{participant}</li>
           ))}
         </ul>
