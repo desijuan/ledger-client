@@ -35,6 +35,7 @@ import Window from './Window';
 
 const Expenses = () => {
   const [state, setState] = useState({ loading: true, data: {} });
+  const { groupID } = useParams();
 
   const navigate = useNavigate();
 
@@ -48,8 +49,6 @@ const Expenses = () => {
       console.log(error);
     }
   };
-
-  const { groupID } = useParams();
 
   if (state.loading) {
     getGroup(groupID);
