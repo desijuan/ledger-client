@@ -91,21 +91,6 @@ const Form = () => {
         </div>
       </div>
       <div className='form-group mb-3'>
-        <label htmlFor='amount' className='form-label'>
-          How much?
-        </label>
-        <div className='input-group mb-3'>
-          <span className='input-group-text'>$</span>
-          <input
-            type='number'
-            className='form-control'
-            min='0'
-            name='amount'
-            ref={howMuchInputRef}
-          />
-        </div>
-      </div>
-      <div className='form-group mb-3'>
         <label htmlFor='to' className='form-label'>
           To whom?
         </label>
@@ -136,6 +121,21 @@ const Form = () => {
         <input type='text' className='form-control' ref={whatForInputRef} />
       </div>
       <div className='form-group mb-3'>
+        <label htmlFor='amount' className='form-label'>
+          How much?
+        </label>
+        <div className='input-group mb-3'>
+          <span className='input-group-text'>$</span>
+          <input
+            type='number'
+            className='form-control'
+            min='0'
+            name='amount'
+            ref={howMuchInputRef}
+          />
+        </div>
+      </div>
+      <div className='form-group mb-3'>
         <label htmlFor='date' className='form-label'>
           When?
         </label>
@@ -152,14 +152,14 @@ const Form = () => {
           type='button'
           className='btn btn-primary'
           onClick={() => {
-            const newExpense = {
+            const expense = {
               from: state.from,
               to: state.to,
               amount: howMuchInputRef.current.value,
               for: whatForInputRef.current.value,
               date: whenInputRef.current.value,
             };
-            postExpense(groupID, newExpense);
+            postExpense(groupID, expense).then(navigate(`/group/${groupID}`));
           }}
         >
           Add expense
@@ -167,7 +167,7 @@ const Form = () => {
         <button
           type='button'
           className='btn btn-secondary'
-          onClick={() => navigate('cancel')}
+          onClick={() => navigate(`/group/${groupID}`)}
         >
           Cancel
         </button>

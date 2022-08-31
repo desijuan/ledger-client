@@ -15,7 +15,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path='/' element={<Landing />} />
+      <Route index element={<Landing />} />
       <Route path='new-group' element={<NewGroup />} />
       <Route path='group/:groupID' element={<GroupOverview />} />
       <Route path='group/:groupID/new-expense' element={<NewExpense />} />
