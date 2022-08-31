@@ -41,12 +41,7 @@ const Form = () => {
         <label htmlFor='group-name' className='form-label'>
           Group name:
         </label>
-        <input
-          type='text'
-          className='form-control'
-          id='group-name'
-          ref={groupNameInputRef}
-        />
+        <input type='text' className='form-control' ref={groupNameInputRef} />
       </div>
       <div className='form-group mb-3'>
         <label htmlFor='participant-name' className='form-label'>
@@ -56,24 +51,22 @@ const Form = () => {
           <input
             type='text'
             className='form-control'
-            id='add-participant-input'
             ref={addParticipantInputRef}
           />
           <button
             className='btn btn-primary'
             type='button'
-            id='add-participant-btn'
             onClick={addParticipantBtnHandler}
           >
             Add
           </button>
         </div>
       </div>
-      <div id='participants-list-container' hidden={participants.length === 0}>
+      <div hidden={participants.length === 0}>
         <h4>Participants</h4>
-        <ul id='participants-list'>
-          {participants.map((participant, index) => (
-            <li key={index}>{participant}</li>
+        <ul>
+          {participants.map((participant) => (
+            <li key={participant}>{participant}</li>
           ))}
         </ul>
       </div>
@@ -81,7 +74,6 @@ const Form = () => {
         <button
           className='btn btn-primary'
           type='button'
-          id='submit-btn'
           onClick={submitBtnHandler}
         >
           Done!

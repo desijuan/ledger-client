@@ -35,6 +35,7 @@ import Window from './Window';
 
 const Expenses = () => {
   const [state, setState] = useState({ loading: true, data: {} });
+
   const { groupID } = useParams();
 
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const Expenses = () => {
     getGroup(groupID);
     return (
       <div className='d-flex align-items-center justify-content-between'>
-        <span id='expenses-status-text'>Loading...</span>
+        <span>Loading...</span>
         <div
           className='spinner-border spinner-border-sm'
           role='status'
@@ -74,7 +75,6 @@ const Expenses = () => {
           <button
             type='button'
             className='btn btn-primary btn-sm'
-            id='new-expense-button'
             onClick={() => navigate('new-expense')}
           >
             New expense
@@ -93,19 +93,18 @@ const Expenses = () => {
         <button
           type='button'
           className='btn btn-primary btn-sm'
-          id='new-expense-button'
           onClick={() => navigate('new-expense')}
         >
           New expense
         </button>
       </div>
 
-      <ul className='list-group list-group-flush' id='expenses-list'>
-        {group.expenses.map((entry) => (
-          <li className='list-group-item'>{`${
-            entry.from
-          } gave $${entry.amount.toFixed(2)} to ${entry.to} for ${
-            entry.for
+      <ul className='list-group list-group-flush'>
+        {group.expenses.map((expense) => (
+          <li key={expense._id} className='list-group-item'>{`${
+            expense.from
+          } gave $${expense.amount.toFixed(2)} to ${expense.to} for ${
+            expense.for
           }.`}</li>
         ))}
       </ul>
