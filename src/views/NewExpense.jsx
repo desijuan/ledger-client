@@ -115,12 +115,6 @@ const Form = () => {
         </div>
       </div>
       <div className='form-group mb-3'>
-        <label htmlFor='description' className='form-label'>
-          What for?
-        </label>
-        <input type='text' className='form-control' ref={whatForInputRef} />
-      </div>
-      <div className='form-group mb-3'>
         <label htmlFor='amount' className='form-label'>
           How much?
         </label>
@@ -134,6 +128,12 @@ const Form = () => {
             ref={howMuchInputRef}
           />
         </div>
+      </div>
+      <div className='form-group mb-3'>
+        <label htmlFor='description' className='form-label'>
+          What for?
+        </label>
+        <input type='text' className='form-control' ref={whatForInputRef} />
       </div>
       <div className='form-group mb-3'>
         <label htmlFor='date' className='form-label'>
@@ -151,7 +151,7 @@ const Form = () => {
         <button
           type='button'
           className='btn btn-primary'
-          onClick={() => {
+          onClick={async () => {
             const expense = {
               from: state.from,
               to: state.to,
@@ -159,7 +159,8 @@ const Form = () => {
               for: whatForInputRef.current.value,
               date: whenInputRef.current.value,
             };
-            postExpense(groupID, expense).then(navigate(`/group/${groupID}`));
+            await postExpense(groupID, expense);
+            navigate(`/group/${groupID}`);
           }}
         >
           Add expense
