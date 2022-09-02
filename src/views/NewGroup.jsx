@@ -89,7 +89,7 @@ const Form = () => {
             className='btn btn-primary btn-sm'
             onClick={clearListBtnHandler}
           >
-            Clear list
+            Clear
           </button>
         </div>
         <ul>
