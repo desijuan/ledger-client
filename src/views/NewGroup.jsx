@@ -27,14 +27,9 @@ const Form = () => {
     addParticipantInputRef.current.focus();
   };
 
-  const enterHandler = (event) => {
-    if (event.key === 'Enter' || event.key === 'NumpadEnter') {
-      addParticipantHandler();
-    }
-  };
-
   const clearListBtnHandler = () => {
     setParticipants([]);
+    addParticipantInputRef.current.focus();
   };
 
   const submitBtnHandler = async () => {
@@ -66,7 +61,19 @@ const Form = () => {
         <label htmlFor='group-name' className='form-label'>
           Group name:
         </label>
-        <input type='text' className='form-control' ref={groupNameInputRef} />
+        <input
+          type='text'
+          className='form-control'
+          ref={groupNameInputRef}
+          onKeyDown={(event) => {
+            if (
+              (event.key === 'Enter' || event.key === 'NumpadEnter') &&
+              groupNameInputRef.current.value !== ''
+            ) {
+              addParticipantInputRef.current.focus();
+            }
+          }}
+        />
       </div>
       <div className='form-group mb-3'>
         <label htmlFor='participant-name' className='form-label'>
@@ -77,7 +84,11 @@ const Form = () => {
             type='text'
             className='form-control'
             ref={addParticipantInputRef}
-            onKeyDown={enterHandler}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === 'NumpadEnter') {
+                addParticipantHandler();
+              }
+            }}
           />
           <button
             className='btn btn-primary'
