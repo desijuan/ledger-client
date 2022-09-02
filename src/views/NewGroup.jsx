@@ -15,15 +15,34 @@ const Form = () => {
 
   const addParticipantBtnHandler = () => {
     const newParticipantName = addParticipantInputRef.current.value;
-    addParticipantInputRef.current.value = '';
+    if (
+      newParticipantName !== '' &&
+      !participants
+        .map((participant) => participant.toUpperCase())
+        .includes(newParticipantName.toUpperCase())
+    ) {
+      setParticipants((participants) => [...participants, newParticipantName]);
+      addParticipantInputRef.current.value = '';
+    }
     addParticipantInputRef.current.focus();
-    setParticipants((participants) => [...participants, newParticipantName]);
+  };
+
+  const clearListBtnHandler = () => {
+    setParticipants([]);
   };
 
   const submitBtnHandler = async () => {
+    const name = groupNameInputRef.current.value;
+    if (name === '') {
+      groupNameInputRef.current.focus();
+      return;
+    } else if (participants.length < 2) {
+      addParticipantInputRef.current.focus();
+      return;
+    }
     try {
       participants.sort();
-      const newGroup = { name: groupNameInputRef.current.value, participants };
+      const newGroup = { name, participants };
       const response = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/v1/groups`,
         newGroup
@@ -62,8 +81,17 @@ const Form = () => {
           </button>
         </div>
       </div>
-      <div hidden={participants.length === 0}>
-        <h4>Participants</h4>
+      <div>
+        <div className='d-flex align-items-center justify-content-between'>
+          <h4>Participants ({participants.length})</h4>
+          <button
+            type='button'
+            className='btn btn-primary btn-sm'
+            onClick={clearListBtnHandler}
+          >
+            Clear list
+          </button>
+        </div>
         <ul>
           {participants.map((participant) => (
             <li key={participant}>{participant}</li>

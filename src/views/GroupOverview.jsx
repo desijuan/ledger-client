@@ -101,7 +101,7 @@ const Expenses = () => {
 
       <ul className='list-group list-group-flush'>
         {group.expenses.map((expense) => (
-          <li key={expense._id} className='list-group-item'>{`${
+          <li className='list-group-item' key={expense._id}>{`${
             expense.from
           } gave $${expense.amount.toFixed(2)} to ${expense.to} for ${
             expense.for
