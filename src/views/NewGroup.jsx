@@ -13,7 +13,7 @@ const Form = () => {
 
   const navigate = useNavigate();
 
-  const addParticipantBtnHandler = () => {
+  const addParticipantHandler = () => {
     const newParticipantName = addParticipantInputRef.current.value;
     if (
       newParticipantName !== '' &&
@@ -25,6 +25,12 @@ const Form = () => {
       addParticipantInputRef.current.value = '';
     }
     addParticipantInputRef.current.focus();
+  };
+
+  const enterHandler = (event) => {
+    if (event.key === 'Enter' || event.key === 'NumpadEnter') {
+      addParticipantHandler();
+    }
   };
 
   const clearListBtnHandler = () => {
@@ -71,11 +77,12 @@ const Form = () => {
             type='text'
             className='form-control'
             ref={addParticipantInputRef}
+            onKeyDown={enterHandler}
           />
           <button
             className='btn btn-primary'
             type='button'
-            onClick={addParticipantBtnHandler}
+            onClick={addParticipantHandler}
           >
             Add
           </button>
