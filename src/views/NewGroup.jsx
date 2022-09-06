@@ -4,8 +4,10 @@ import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Window from '../components/Window';
+import Loading from '../components/Loading';
 
 const Form = () => {
+  const [loading, setLoading] = useState(false);
   const [participants, setParticipants] = useState([]);
 
   const groupNameInputRef = useRef(null);
@@ -42,6 +44,7 @@ const Form = () => {
       return;
     }
     try {
+      setLoading(true);
       participants.sort();
       const newGroup = { name, participants };
       const response = await axios.post(
@@ -54,6 +57,10 @@ const Form = () => {
       console.log(error);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <form>
