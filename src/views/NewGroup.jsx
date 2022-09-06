@@ -36,6 +36,7 @@ const Form = () => {
 
   const submitBtnHandler = async () => {
     const name = groupNameInputRef.current.value;
+    // validation
     if (name === '') {
       groupNameInputRef.current.focus();
       return;

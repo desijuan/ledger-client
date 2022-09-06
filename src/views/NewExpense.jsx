@@ -16,6 +16,7 @@ const Form = () => {
   const { groupID } = useParams();
   const navigate = useNavigate();
 
+  const toWhomRef = useRef(null);
   const howMuchInputRef = useRef(null);
   const whatForInputRef = useRef(null);
   const whenInputRef = useRef(null);
@@ -36,19 +37,47 @@ const Form = () => {
     }
   };
 
-  const postExpense = async (groupID, expense) => {
+  const addExpenseBtnHandler = async () => {
+    // validation
+    if (!state.to) {
+      toWhomRef.current.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    if (!howMuchInputRef.current.value) {
+      howMuchInputRef.current.focus();
+      return;
+    }
+    if (!whatForInputRef.current.value) {
+      whatForInputRef.current.focus();
+      return;
+    }
+    if (!whenInputRef.current.value) {
+      whenInputRef.current.focus();
+      return;
+    }
     try {
+      setState({ ...state, loading: true });
+      const expense = {
+        from: state.from,
+        to: state.to,
+        amount: howMuchInputRef.current.value,
+        for: whatForInputRef.current.value,
+        date: whenInputRef.current.value,
+      };
       await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/api/v1/groups/${groupID}`,
         expense
       );
+      navigate(`/group/${groupID}`);
     } catch (error) {
       console.log(error);
     }
   };
 
   if (state.loading) {
-    getGroup(groupID);
+    if (!state.participants) {
+      getGroup(groupID);
+    }
     return <Loading />;
   }
 
@@ -80,29 +109,27 @@ const Form = () => {
           <p className='col-form-label'>gave money to someone.</p>
         </div>
       </div>
-      <div className='form-group mb-3'>
+      <div className='form-group mb-3' ref={toWhomRef}>
         <label htmlFor='to' className='form-label'>
           To whom?
         </label>
-        <div>
-          {otherParticipants.map((participant) => (
-            <div key={participant} className='form-check'>
-              <input
-                className='form-check-input'
-                type='radio'
-                name='to'
-                value={participant}
-                checked={state.to === participant}
-                onChange={(event) =>
-                  setState({ ...state, to: event.target.value })
-                }
-              />
-              <label className='form-check-label' htmlFor={participant}>
-                {participant}
-              </label>
-            </div>
-          ))}
-        </div>
+        {otherParticipants.map((participant) => (
+          <div key={participant} className='form-check'>
+            <input
+              className='form-check-input'
+              type='radio'
+              name='to'
+              value={participant}
+              checked={state.to === participant}
+              onChange={(event) =>
+                setState({ ...state, to: event.target.value })
+              }
+            />
+            <label className='form-check-label' htmlFor={participant}>
+              {participant}
+            </label>
+          </div>
+        ))}
       </div>
       <div className='form-group mb-3'>
         <label htmlFor='amount' className='form-label'>
@@ -141,17 +168,7 @@ const Form = () => {
         <button
           type='button'
           className='btn btn-primary'
-          onClick={async () => {
-            const expense = {
-              from: state.from,
-              to: state.to,
-              amount: howMuchInputRef.current.value,
-              for: whatForInputRef.current.value,
-              date: whenInputRef.current.value,
-            };
-            await postExpense(groupID, expense);
-            navigate(`/group/${groupID}`);
-          }}
+          onClick={addExpenseBtnHandler}
         >
           Add expense
         </button>
