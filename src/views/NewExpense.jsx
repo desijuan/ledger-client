@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import Window from './Window';
+import Window from '../components/Window';
+import Loading from '../components/Loading';
 
 const Form = () => {
   const [state, setState] = useState({
@@ -48,25 +49,14 @@ const Form = () => {
 
   if (state.loading) {
     getGroup(groupID);
-    return (
-      <div className='d-flex align-items-center justify-content-between'>
-        <span>Loading...</span>
-        <div
-          className='spinner-border spinner-border-sm'
-          role='status'
-          aria-hidden='true'
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   const today = new Date();
-
   const { participants } = state;
   const otherParticipants = participants.filter(
     (participant) => participant !== state.from
   );
-
   return (
     <form>
       <div className='row g-3 align-items-center mb-3'>
@@ -177,12 +167,10 @@ const Form = () => {
   );
 };
 
-const NewExpense = () => {
-  return (
-    <Window title='New expense'>
-      <Form />
-    </Window>
-  );
-};
+const NewExpense = () => (
+  <Window title='New expense'>
+    <Form />
+  </Window>
+);
 
 export default NewExpense;

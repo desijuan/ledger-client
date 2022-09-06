@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import Window from './Window';
+import Window from '../components/Window';
+import Loading from '../components/Loading';
 
 // const ToSettleTheDebts = () => {
 //   return (
@@ -35,9 +36,7 @@ import Window from './Window';
 
 const Expenses = () => {
   const [state, setState] = useState({ loading: true, data: {} });
-
   const { groupID } = useParams();
-
   const navigate = useNavigate();
 
   const getGroup = async (groupID) => {
@@ -53,23 +52,13 @@ const Expenses = () => {
 
   if (state.loading) {
     getGroup(groupID);
-    return (
-      <div className='d-flex align-items-center justify-content-between'>
-        <span>Loading...</span>
-        <div
-          className='spinner-border spinner-border-sm'
-          role='status'
-          aria-hidden='true'
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   const group = state.data;
-
   if (group.expenses.length === 0) {
     return (
-      <div>
+      <>
         <div className='d-flex align-items-center justify-content-between'>
           <h4>Expenses</h4>
           <button
@@ -82,10 +71,9 @@ const Expenses = () => {
         </div>
 
         <span>No expenses yet.</span>
-      </div>
+      </>
     );
   }
-
   return (
     <>
       <div className='d-flex align-items-center justify-content-between mb-3'>
@@ -112,13 +100,11 @@ const Expenses = () => {
   );
 };
 
-const GroupOverview = () => {
-  return (
-    <Window title='Group overview'>
-      {/* <ToSettleTheDebts /> */}
-      <Expenses />
-    </Window>
-  );
-};
+const GroupOverview = () => (
+  <Window title='Group overview'>
+    {/* <ToSettleTheDebts /> */}
+    <Expenses />
+  </Window>
+);
 
 export default GroupOverview;

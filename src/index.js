@@ -5,7 +5,7 @@ import './styles.css';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Landing from './views/Landing';
+import Home from './views/Home';
 import NewGroup from './views/NewGroup';
 import GroupOverview from './views/GroupOverview';
 import NewExpense from './views/NewExpense';
@@ -15,7 +15,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route index element={<Landing />} />
+      <Route index element={<Home />} />
       <Route path='new-group' element={<NewGroup />} />
       <Route path='group/:groupID' element={<GroupOverview />} />
       <Route path='group/:groupID/new-expense' element={<NewExpense />} />

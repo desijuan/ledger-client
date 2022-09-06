@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Window from './Window';
+import Window from '../components/Window';
 
 const Form = () => {
   const [participants, setParticipants] = useState([]);
@@ -129,12 +129,10 @@ const Form = () => {
   );
 };
 
-const NewGroup = () => {
-  return (
-    <Window title='New group'>
-      <Form />
-    </Window>
-  );
-};
+const NewGroup = () => (
+  <Window title='New group'>
+    <Form />
+  </Window>
+);
 
 export default NewGroup;
