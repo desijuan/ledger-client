@@ -1,6 +1,6 @@
 # Ledger
 
-Node.js app to track expenses of groups of persons.
+App to track expenses of groups of persons.
 
 ## Client
 
