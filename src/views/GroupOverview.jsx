@@ -59,6 +59,7 @@ const Expenses = () => {
   if (group.expenses.length === 0) {
     return (
       <>
+        <h1 className='text-center mb-3'>{group.name}</h1>
         <div className='d-flex align-items-center justify-content-between'>
           <h4>Expenses</h4>
           <button
@@ -76,6 +77,7 @@ const Expenses = () => {
   }
   return (
     <>
+      <h1 className='text-center mb-3'>{group.name}</h1>
       <div className='d-flex align-items-center justify-content-between mb-3'>
         <h4>Expenses</h4>
         <button
