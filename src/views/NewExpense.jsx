@@ -6,6 +6,24 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Window from '../components/Window';
 import Loading from '../components/Loading';
 
+const Tabs = () => {
+  const [tab, setTab] = useState('expense');
+
+  return (
+    <ul className='nav nav-tabs mb-3'>
+      <li className='nav-item'>
+        <p className='nav-link'>Expense</p>
+      </li>
+      <li className='nav-item'>
+        <p className='nav-link active'>Money given</p>
+      </li>
+      <li className='nav-item'>
+        <p class='nav-link'>Income</p>
+      </li>
+    </ul>
+  );
+};
+
 const Form = () => {
   const [state, setState] = useState({
     loading: true,
@@ -186,18 +204,7 @@ const Form = () => {
 
 const NewExpense = () => (
   <Window title='New expense'>
-    <ul className='nav nav-tabs mb-3'>
-      <li className='nav-item'>
-        <p className='nav-link'>Expense</p>
-      </li>
-      <li className='nav-item'>
-        <p className='nav-link active'>Money given</p>
-      </li>
-      <li className='nav-item'>
-        <p class='nav-link'>Income</p>
-      </li>
-    </ul>
-
+    <Tabs />
     <Form />
   </Window>
 );
