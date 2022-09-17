@@ -186,6 +186,18 @@ const Form = () => {
 
 const NewExpense = () => (
   <Window title='New expense'>
+    <ul className='nav nav-tabs mb-3'>
+      <li className='nav-item'>
+        <p className='nav-link'>Expense</p>
+      </li>
+      <li className='nav-item'>
+        <p className='nav-link active'>Money given</p>
+      </li>
+      <li className='nav-item'>
+        <p class='nav-link'>Income</p>
+      </li>
+    </ul>
+
     <Form />
   </Window>
 );
