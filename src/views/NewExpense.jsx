@@ -8,34 +8,33 @@ import Loading from '../components/Loading';
 
 const Tabs = ({ activeTab, handleTabs }) => {
   return (
-    <ul className='nav nav-tabs mb-3'>
-      <li className='nav-item'>
-        <button
-          className={activeTab === 'expense' ? 'nav-link active' : 'nav-link'}
-          onClick={() => handleTabs('expense')}
-        >
-          Expense
-        </button>
-      </li>
-      <li className='nav-item'>
-        <button
-          className={
-            activeTab === 'money-given' ? 'nav-link active' : 'nav-link'
-          }
-          onClick={() => handleTabs('money-given')}
-        >
-          Money given
-        </button>
-      </li>
-      <li className='nav-item'>
-        <button
-          className={activeTab === 'income' ? 'nav-link active' : 'nav-link'}
-          onClick={() => handleTabs('income')}
-        >
-          Income
-        </button>
-      </li>
-    </ul>
+    <nav className='nav nav-tabs flex-row flex-nowrap justify-content-between mb-3'>
+      <button
+        className={
+          'nav-link flex-fill' + (activeTab === 'expense' ? ' active' : '')
+        }
+        onClick={() => handleTabs('expense')}
+      >
+        Expense
+      </button>
+      <button
+        className={
+          'nav-link flex-fill flex-shrink-0' +
+          (activeTab === 'money-given' ? ' active' : '')
+        }
+        onClick={() => handleTabs('money-given')}
+      >
+        Money given
+      </button>
+      <button
+        className={
+          'nav-link flex-fill' + (activeTab === 'income' ? ' active' : '')
+        }
+        onClick={() => handleTabs('income')}
+      >
+        Income
+      </button>
+    </nav>
   );
 };
 
