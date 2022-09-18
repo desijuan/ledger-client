@@ -6,32 +6,48 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Window from '../components/Window';
 import Loading from '../components/Loading';
 
-const Tabs = () => {
-  const [tab, setTab] = useState('expense');
-
+const Tabs = ({ activeTab, handleTabs }) => {
   return (
     <ul className='nav nav-tabs mb-3'>
       <li className='nav-item'>
-        <p className='nav-link'>Expense</p>
+        <button
+          className={activeTab === 'expense' ? 'nav-link active' : 'nav-link'}
+          onClick={() => handleTabs('expense')}
+        >
+          Expense
+        </button>
       </li>
       <li className='nav-item'>
-        <p className='nav-link active'>Money given</p>
+        <button
+          className={
+            activeTab === 'money-given' ? 'nav-link active' : 'nav-link'
+          }
+          onClick={() => handleTabs('money-given')}
+        >
+          Money given
+        </button>
       </li>
       <li className='nav-item'>
-        <p class='nav-link'>Income</p>
+        <button
+          className={activeTab === 'income' ? 'nav-link active' : 'nav-link'}
+          onClick={() => handleTabs('income')}
+        >
+          Income
+        </button>
       </li>
     </ul>
   );
 };
 
-const Form = () => {
-  const [state, setState] = useState({
-    loading: true,
-    participants: null,
-    from: null,
-    to: null,
-  });
-  const { groupID } = useParams();
+const MoneyGiven = ({
+  groupID,
+  participants,
+  from,
+  to,
+  handleParticipant0,
+  handleParticipant1,
+  setLoading,
+}) => {
   const navigate = useNavigate();
 
   const toWhomRef = useRef(null);
@@ -39,25 +55,11 @@ const Form = () => {
   const whatForInputRef = useRef(null);
   const whenInputRef = useRef(null);
 
-  const getGroup = async (groupID) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/groups/${groupID}`
-      );
-      setState({
-        loading: false,
-        participants: response.data.participants,
-        from: response.data.participants[0],
-        to: null,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const today = new Date();
 
   const addExpenseBtnHandler = async () => {
     // validation
-    if (!state.to) {
+    if (!to) {
       toWhomRef.current.scrollIntoView({ behavior: 'smooth' });
       return;
     }
@@ -74,10 +76,10 @@ const Form = () => {
       return;
     }
     try {
-      setState({ ...state, loading: true });
+      setLoading(true);
       const expense = {
-        from: state.from,
-        to: state.to,
+        from: from,
+        to: to,
         amount: howMuchInputRef.current.value,
         for: whatForInputRef.current.value,
         date: whenInputRef.current.value,
@@ -92,18 +94,10 @@ const Form = () => {
     }
   };
 
-  if (state.loading) {
-    if (!state.participants) {
-      getGroup(groupID);
-    }
-    return <Loading />;
-  }
-
-  const today = new Date();
-  const { participants } = state;
   const otherParticipants = participants.filter(
-    (participant) => participant !== state.from
+    (participant) => participant !== from
   );
+
   return (
     <form>
       <div className='row g-3 align-items-center mb-3'>
@@ -111,10 +105,8 @@ const Form = () => {
           <select
             className='form-select'
             name='from'
-            value={state.from}
-            onChange={(event) =>
-              setState({ ...state, from: event.target.value, to: null })
-            }
+            value={from}
+            onChange={handleParticipant0}
           >
             {participants.map((participant) => (
               <option key={participant} value={participant}>
@@ -138,10 +130,8 @@ const Form = () => {
               type='radio'
               name='to'
               value={participant}
-              checked={state.to === participant}
-              onChange={(event) =>
-                setState({ ...state, to: event.target.value })
-              }
+              checked={to === participant}
+              onChange={handleParticipant1}
             />
             <label className='form-check-label' htmlFor={participant}>
               {participant}
@@ -202,11 +192,92 @@ const Form = () => {
   );
 };
 
-const NewExpense = () => (
-  <Window title='New expense'>
-    <Tabs />
-    <Form />
-  </Window>
-);
+const Content = ({
+  groupID,
+  activeTab,
+  state,
+  handleParticipant0,
+  handleParticipant1,
+  setLoading,
+}) => {
+  if (state.loading) {
+    return <Loading />;
+  } else if (activeTab === 'expense') {
+    return <span>Expense</span>;
+  } else if (activeTab === 'money-given') {
+    return (
+      <MoneyGiven
+        groupID={groupID}
+        participants={state.participants}
+        from={state.participant0}
+        to={state.participant1}
+        handleParticipant0={handleParticipant0}
+        handleParticipant1={handleParticipant1}
+        setLoading={setLoading}
+      />
+    );
+  } else if (activeTab === 'income') {
+    return <span>Income</span>;
+  }
+};
+
+const NewExpense = () => {
+  const [activeTab, setActiveTab] = useState('money-given');
+  const [state, setState] = useState({
+    loading: true,
+    participants: null,
+    participant0: null,
+    participant1: null,
+  });
+
+  const getGroup = async (groupID) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/api/v1/groups/${groupID}`
+      );
+      setState({
+        loading: false,
+        participants: response.data.participants,
+        participant0: response.data.participants[0],
+        participant1: null,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { groupID } = useParams();
+
+  if (!state.participants) {
+    getGroup(groupID);
+  }
+
+  const setLoading = (value) => setState({ ...state, loading: value });
+
+  const handleTabs = (value) => setActiveTab(value);
+
+  const handleParticipant0 = (event) =>
+    setState({
+      ...state,
+      participant0: event.target.value,
+      participant1: null,
+    });
+  const handleParticipant1 = (event) =>
+    setState({ ...state, participant1: event.target.value });
+
+  return (
+    <Window title='New expense'>
+      <Tabs activeTab={activeTab} handleTabs={handleTabs} />
+      <Content
+        groupID={groupID}
+        activeTab={activeTab}
+        state={state}
+        handleParticipant0={handleParticipant0}
+        handleParticipant1={handleParticipant1}
+        setLoading={setLoading}
+      />
+    </Window>
+  );
+};
 
 export default NewExpense;
