@@ -1,63 +1,69 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
-import Window from '../components/Window';
-import Loading from '../components/Loading';
+import Window from "../components/Window";
+import Loading from "../components/Loading";
 
-const Form = () => {
+function Form() {
   const [loading, setLoading] = useState(false);
-  const [participants, setParticipants] = useState([]);
+  const [members, setmembers] = useState([]);
 
   const groupNameInputRef = useRef(null);
-  const addParticipantInputRef = useRef(null);
+  const descriptionInputRef = useRef(null);
+  const addMemberInputRef = useRef(null);
 
   const navigate = useNavigate();
 
-  const addParticipantHandler = () => {
-    const newParticipantName = addParticipantInputRef.current.value;
+  function addMemberBtnHandler() {
+    const memberName = addMemberInputRef.current.value;
     if (
-      newParticipantName !== '' &&
-      !participants
-        .map((participant) => participant.toUpperCase())
-        .includes(newParticipantName.toUpperCase())
+      memberName === "" ||
+      members
+        .map((member) => member.toUpperCase())
+        .includes(memberName.toUpperCase())
     ) {
-      setParticipants((participants) => [...participants, newParticipantName]);
-      addParticipantInputRef.current.value = '';
+      addMemberInputRef.current.focus();
     }
-    addParticipantInputRef.current.focus();
-  };
 
-  const clearListBtnHandler = () => {
-    setParticipants([]);
-    addParticipantInputRef.current.focus();
-  };
+    setmembers((members) => [...members, memberName]);
+    addMemberInputRef.current.value = "";
+  }
 
-  const submitBtnHandler = async () => {
-    const name = groupNameInputRef.current.value;
-    // validation
-    if (name === '') {
+  function clearListBtnHandler() {
+    setmembers([]);
+    addMemberInputRef.current.focus();
+  }
+
+  async function submitBtnHandler() {
+    const groupName = groupNameInputRef.current.value;
+
+    if (groupName === "") {
       groupNameInputRef.current.focus();
       return;
-    } else if (participants.length < 2) {
-      addParticipantInputRef.current.focus();
+    } else if (members.length < 2) {
+      addMemberInputRef.current.focus();
       return;
     }
-    try {
-      setLoading(true);
-      participants.sort();
-      const newGroup = { name, participants };
-      const response = await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/groups`,
-        newGroup
-      );
-      const groupID = response.data._id;
-      navigate(`../group/${groupID}`);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+    const description = descriptionInputRef.current.value;
+
+    setLoading(true);
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/new-group`, {
+        name: groupName,
+        description: description,
+        members: members,
+      })
+      .then((resp) => {
+        const group_id = resp.data.group_id;
+        navigate(`../group/${group_id.toString(16)}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   if (loading) {
     return <Loading />;
@@ -65,69 +71,87 @@ const Form = () => {
 
   return (
     <form>
-      <div className='form-group mb-3'>
-        <label htmlFor='group-name' className='form-label'>
+      <div className="form-group mb-3">
+        <label htmlFor="group-name" className="form-label">
           Group name:
         </label>
         <input
-          type='text'
-          className='form-control'
+          type="text"
+          className="form-control"
           ref={groupNameInputRef}
           onKeyDown={(event) => {
             if (
-              (event.key === 'Enter' || event.key === 'NumpadEnter') &&
-              groupNameInputRef.current.value !== ''
+              (event.key === "Enter" || event.key === "NumpadEnter") &&
+              groupNameInputRef.current.value !== ""
             ) {
-              addParticipantInputRef.current.focus();
+              descriptionInputRef.current.focus();
             }
           }}
         />
       </div>
-      <div className='form-group mb-3'>
-        <label htmlFor='participant-name' className='form-label'>
+      <div className="form-group mb-3">
+        <label htmlFor="description" className="form-label">
+          Description:
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          ref={descriptionInputRef}
+          onKeyDown={(event) => {
+            if (
+              (event.key === "Enter" || event.key === "NumpadEnter") &&
+              descriptionInputRef.current.value !== ""
+            ) {
+              addMemberInputRef.current.focus();
+            }
+          }}
+        />
+      </div>
+      <div className="form-group mb-3">
+        <label htmlFor="participant-name" className="form-label">
           Add participant:
         </label>
-        <div className='input-group'>
+        <div className="input-group">
           <input
-            type='text'
-            className='form-control'
-            ref={addParticipantInputRef}
+            type="text"
+            className="form-control"
+            ref={addMemberInputRef}
             onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === 'NumpadEnter') {
-                addParticipantHandler();
+              if (event.key === "Enter" || event.key === "NumpadEnter") {
+                addMemberBtnHandler();
               }
             }}
           />
           <button
-            className='btn btn-primary'
-            type='button'
-            onClick={addParticipantHandler}
+            className="btn btn-primary"
+            type="button"
+            onClick={addMemberBtnHandler}
           >
             Add
           </button>
         </div>
       </div>
       <div>
-        <div className='d-flex align-items-center justify-content-between'>
-          <h4>Participants ({participants.length})</h4>
+        <div className="d-flex align-items-center justify-content-between">
+          <h4>members ({members.length})</h4>
           <button
-            type='button'
-            className='btn btn-primary btn-sm'
+            type="button"
+            className="btn btn-primary btn-sm"
             onClick={clearListBtnHandler}
           >
             Clear
           </button>
         </div>
         <ul>
-          {participants.map((participant) => (
-            <li key={participant}>{participant}</li>
+          {members.map((member) => (
+            <li key={member}>{member}</li>
           ))}
         </ul>
       </div>
-      <div className='d-grid gap-2 mx-auto'>
+      <div className="d-grid gap-2 mx-auto">
         <button
-          className='btn btn-primary'
-          type='button'
+          className="btn btn-primary"
+          type="button"
           onClick={submitBtnHandler}
         >
           Done!
@@ -135,10 +159,10 @@ const Form = () => {
       </div>
     </form>
   );
-};
+}
 
 const NewGroup = () => (
-  <Window title='New group'>
+  <Window title="New group">
     <Form />
   </Window>
 );

@@ -1,36 +1,36 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import Window from '../components/Window';
-import Loading from '../components/Loading';
+import Window from "../components/Window";
+import Loading from "../components/Loading";
 
 const Tabs = ({ activeTab, handleTabs }) => {
   return (
-    <nav className='nav nav-tabs flex-row flex-nowrap justify-content-between mb-3'>
+    <nav className="nav nav-tabs flex-row flex-nowrap justify-content-between mb-3">
       <button
         className={
-          'nav-link flex-fill' + (activeTab === 'expense' ? ' active' : '')
+          "nav-link flex-fill" + (activeTab === "expense" ? " active" : "")
         }
-        onClick={() => handleTabs('expense')}
+        onClick={() => handleTabs("expense")}
       >
         Expense
       </button>
       <button
         className={
-          'nav-link flex-fill flex-shrink-0' +
-          (activeTab === 'money-given' ? ' active' : '')
+          "nav-link flex-fill flex-shrink-0" +
+          (activeTab === "money-given" ? " active" : "")
         }
-        onClick={() => handleTabs('money-given')}
+        onClick={() => handleTabs("money-given")}
       >
         Money given
       </button>
       <button
         className={
-          'nav-link flex-fill' + (activeTab === 'income' ? ' active' : '')
+          "nav-link flex-fill" + (activeTab === "income" ? " active" : "")
         }
-        onClick={() => handleTabs('income')}
+        onClick={() => handleTabs("income")}
       >
         Income
       </button>
@@ -39,7 +39,7 @@ const Tabs = ({ activeTab, handleTabs }) => {
 };
 
 const MoneyGiven = ({
-  groupID,
+  group_id,
   participants,
   from,
   to,
@@ -59,7 +59,7 @@ const MoneyGiven = ({
   const addExpenseBtnHandler = async () => {
     // validation
     if (!to) {
-      toWhomRef.current.scrollIntoView({ behavior: 'smooth' });
+      toWhomRef.current.scrollIntoView({ behavior: "smooth" });
       return;
     }
     if (!howMuchInputRef.current.value) {
@@ -77,33 +77,32 @@ const MoneyGiven = ({
     try {
       setLoading(true);
       const expense = {
-        from: from,
-        to: to,
+        from_id: 1,
+        to_id: 2,
         amount: howMuchInputRef.current.value,
-        for: whatForInputRef.current.value,
-        date: whenInputRef.current.value,
+        description: whatForInputRef.current.value,
       };
       await axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/groups/${groupID}`,
-        expense
+        `${process.env.REACT_APP_SERVER_URL}/${group_id}/new-expense`,
+        expense,
       );
-      navigate(`/group/${groupID}`);
+      navigate(`/group/${group_id}`);
     } catch (error) {
       console.log(error);
     }
   };
 
   const otherParticipants = participants.filter(
-    (participant) => participant !== from
+    (participant) => participant !== from,
   );
 
   return (
     <form>
-      <div className='row g-3 align-items-center mb-3'>
-        <div className='col-auto'>
+      <div className="row g-3 align-items-center mb-3">
+        <div className="col-auto">
           <select
-            className='form-select'
-            name='from'
+            className="form-select"
+            name="from"
             value={from}
             onChange={handleParticipant0}
           >
@@ -114,75 +113,75 @@ const MoneyGiven = ({
             ))}
           </select>
         </div>
-        <div className='col'>
-          <p className='col-form-label'>gave money to someone.</p>
+        <div className="col">
+          <p className="col-form-label">gave money to someone.</p>
         </div>
       </div>
-      <div className='form-group mb-3' ref={toWhomRef}>
-        <label htmlFor='to' className='form-label'>
+      <div className="form-group mb-3" ref={toWhomRef}>
+        <label htmlFor="to" className="form-label">
           To whom?
         </label>
         {otherParticipants.map((participant) => (
-          <div key={participant} className='form-check'>
+          <div key={participant} className="form-check">
             <input
-              className='form-check-input'
-              type='radio'
-              name='to'
+              className="form-check-input"
+              type="radio"
+              name="to"
               value={participant}
               checked={to === participant}
               onChange={handleParticipant1}
             />
-            <label className='form-check-label' htmlFor={participant}>
+            <label className="form-check-label" htmlFor={participant}>
               {participant}
             </label>
           </div>
         ))}
       </div>
-      <div className='form-group mb-3'>
-        <label htmlFor='amount' className='form-label'>
+      <div className="form-group mb-3">
+        <label htmlFor="amount" className="form-label">
           How much?
         </label>
-        <div className='input-group mb-3'>
-          <span className='input-group-text'>$</span>
+        <div className="input-group mb-3">
+          <span className="input-group-text">$</span>
           <input
-            type='number'
-            className='form-control'
-            min='0'
-            name='amount'
+            type="number"
+            className="form-control"
+            min="0"
+            name="amount"
             ref={howMuchInputRef}
           />
         </div>
       </div>
-      <div className='form-group mb-3'>
-        <label htmlFor='description' className='form-label'>
+      <div className="form-group mb-3">
+        <label htmlFor="description" className="form-label">
           What for?
         </label>
-        <input type='text' className='form-control' ref={whatForInputRef} />
+        <input type="text" className="form-control" ref={whatForInputRef} />
       </div>
-      <div className='form-group mb-3'>
-        <label htmlFor='date' className='form-label'>
+      <div className="form-group mb-3">
+        <label htmlFor="date" className="form-label">
           When?
         </label>
         <input
-          type='date'
-          className='form-control'
-          name='date'
-          defaultValue={today.toLocaleDateString('en-CA')}
+          type="date"
+          className="form-control"
+          name="date"
+          defaultValue={today.toLocaleDateString("en-CA")}
           ref={whenInputRef}
         />
       </div>
-      <div className='d-grid gap-2 mx-auto'>
+      <div className="d-grid gap-2 mx-auto">
         <button
-          type='button'
-          className='btn btn-primary'
+          type="button"
+          className="btn btn-primary"
           onClick={addExpenseBtnHandler}
         >
           Add expense
         </button>
         <button
-          type='button'
-          className='btn btn-secondary'
-          onClick={() => navigate(`/group/${groupID}`)}
+          type="button"
+          className="btn btn-secondary"
+          onClick={() => navigate(`/group/${group_id}`)}
         >
           Cancel
         </button>
@@ -192,7 +191,7 @@ const MoneyGiven = ({
 };
 
 const Content = ({
-  groupID,
+  group_id,
   activeTab,
   state,
   handleParticipant0,
@@ -201,12 +200,12 @@ const Content = ({
 }) => {
   if (state.loading) {
     return <Loading />;
-  } else if (activeTab === 'expense') {
+  } else if (activeTab === "expense") {
     return <span>Expense</span>;
-  } else if (activeTab === 'money-given') {
+  } else if (activeTab === "money-given") {
     return (
       <MoneyGiven
-        groupID={groupID}
+        group_id={group_id}
         participants={state.participants}
         from={state.participant0}
         to={state.participant1}
@@ -215,13 +214,13 @@ const Content = ({
         setLoading={setLoading}
       />
     );
-  } else if (activeTab === 'income') {
+  } else if (activeTab === "income") {
     return <span>Income</span>;
   }
 };
 
 const NewExpense = () => {
-  const [activeTab, setActiveTab] = useState('money-given');
+  const [activeTab, setActiveTab] = useState("money-given");
   const [state, setState] = useState({
     loading: true,
     participants: null,
@@ -229,26 +228,29 @@ const NewExpense = () => {
     participant1: null,
   });
 
-  const getGroup = async (groupID) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/groups/${groupID}`
-      );
-      setState({
-        loading: false,
-        participants: response.data.participants,
-        participant0: response.data.participants[0],
-        participant1: null,
+  const getGroup = async (group_id) => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/group/${group_id}`)
+      .then((response) => {
+        console.log(response);
+        setState({
+          loading: false,
+          participants: response.data.group_board.members
+            .filter((member) => member.member_id !== 0)
+            .map((member) => member.name),
+          participant0: response.data.group_board.members[1].name,
+          participant1: null,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    } catch (error) {
-      console.log(error);
-    }
   };
 
-  const { groupID } = useParams();
+  const { group_id } = useParams();
 
   if (!state.participants) {
-    getGroup(groupID);
+    getGroup(group_id);
   }
 
   const setLoading = (value) => setState({ ...state, loading: value });
@@ -265,10 +267,10 @@ const NewExpense = () => {
     setState({ ...state, participant1: event.target.value });
 
   return (
-    <Window title='New expense'>
+    <Window title="New expense">
       <Tabs activeTab={activeTab} handleTabs={handleTabs} />
       <Content
-        groupID={groupID}
+        group_id={group_id}
         activeTab={activeTab}
         state={state}
         handleParticipant0={handleParticipant0}

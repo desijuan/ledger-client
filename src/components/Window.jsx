@@ -1,8 +1,8 @@
 const Window = ({ title, children }) => (
-  <div className='container my-3'>
-    <div className='card mx-auto shadow-sm'>
-      <div className='card-header'>{title}</div>
-      <div className='card-body'>{children}</div>
+  <div className="container my-3">
+    <div className="card mx-auto shadow-sm">
+      <div className="card-header">{title}</div>
+      <div className="card-body">{children}</div>
     </div>
   </div>
 );

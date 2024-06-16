@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import Window from '../components/Window';
-import Loading from '../components/Loading';
+import Window from "../components/Window";
+import Loading from "../components/Loading";
 
 // const ToSettleTheDebts = () => {
 //   return (
@@ -36,36 +36,36 @@ import Loading from '../components/Loading';
 
 const Expenses = () => {
   const [state, setState] = useState({ loading: true, data: {} });
-  const { groupID } = useParams();
+  const { group_id } = useParams();
   const navigate = useNavigate();
 
-  const getGroup = async (groupID) => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}/api/v1/groups/${groupID}`
-      );
-      setState({ loading: false, data: response.data });
-    } catch (error) {
-      console.log(error);
-    }
+  const getGroup = async (group_id) => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/group/${group_id}`)
+      .then((response) => {
+        setState({ loading: false, data: response.data });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   if (state.loading) {
-    getGroup(groupID);
+    getGroup(group_id);
     return <Loading />;
   }
 
-  const group = state.data;
-  if (group.expenses.length === 0) {
+  const group = state.data.group_board;
+  if (group.trs.length === 0) {
     return (
       <>
-        <h1 className='text-center mb-3'>{group.name}</h1>
-        <div className='d-flex align-items-center justify-content-between'>
+        <h1 className="text-center mb-3">{group.name}</h1>
+        <div className="d-flex align-items-center justify-content-between">
           <h4>Expenses</h4>
           <button
-            type='button'
-            className='btn btn-primary btn-sm'
-            onClick={() => navigate('new-expense')}
+            type="button"
+            className="btn btn-primary btn-sm"
+            onClick={() => navigate("new-expense")}
           >
             New expense
           </button>
@@ -77,24 +77,24 @@ const Expenses = () => {
   }
   return (
     <>
-      <h1 className='text-center mb-3'>{group.name}</h1>
-      <div className='d-flex align-items-center justify-content-between mb-3'>
+      <h1 className="text-center mb-3">{group.name}</h1>
+      <div className="d-flex align-items-center justify-content-between mb-3">
         <h4>Expenses</h4>
         <button
-          type='button'
-          className='btn btn-primary btn-sm'
-          onClick={() => navigate('new-expense')}
+          type="button"
+          className="btn btn-primary btn-sm"
+          onClick={() => navigate("new-expense")}
         >
           New expense
         </button>
       </div>
 
-      <ul className='list-group list-group-flush'>
-        {group.expenses.map((expense) => (
-          <li className='list-group-item' key={expense._id}>{`${
-            expense.from
-          } gave $${expense.amount.toFixed(2)} to ${expense.to} for ${
-            expense.for
+      <ul className="list-group list-group-flush">
+        {group.trs.map((tr) => (
+          <li className="list-group-item" key={tr.from_id}>{`${
+            tr.from_id
+          } gave $${tr.amount.toFixed(2)} to ${tr.to} for ${
+            tr.description
           }.`}</li>
         ))}
       </ul>
@@ -103,7 +103,7 @@ const Expenses = () => {
 };
 
 const GroupOverview = () => (
-  <Window title='Group overview'>
+  <Window title="Group overview">
     {/* <ToSettleTheDebts /> */}
     <Expenses />
   </Window>
